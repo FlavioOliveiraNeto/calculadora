@@ -1,4 +1,5 @@
 import socket
+import sys
 
 # Funções para operações aritméticas
 def somar(numeros):
@@ -49,9 +50,8 @@ def processar_solicitacao(solicitacao):
         return f"Erro: {str(e)}"
 
 # Configurações do servidor
-def iniciar_servidor():
-    # host = colocar o IP de host aqui
-    # porta = colocar a porta aqui
+def iniciar_servidor(host):
+    porta = 15000
 
     servidor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     servidor_socket.bind((host, porta))
@@ -74,4 +74,12 @@ def iniciar_servidor():
 
 # Inicializa o servidor
 if __name__ == "__main__":
-    iniciar_servidor()
+    # Verifica se o IP do host foi passado como argumento
+    if len(sys.argv) < 2:
+        print("Uso: python server.py <IP_DO_HOST>")
+        sys.exit(1)
+
+    # Obtém o IP do host a partir dos argumentos da linha de comando
+    host = sys.argv[1]
+
+    iniciar_servidor(host)
