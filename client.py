@@ -1,9 +1,10 @@
 import socket
+import sys
 
 # Função para enviar solicitação ao servidor
-def enviar_solicitacao(operacao, numeros):
-    # host = colocar o IP de host aqui
-    # porta = colocar a porta aqui
+def enviar_solicitacao(host, operacao, numeros):
+
+    porta = 15000
     
     cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     cliente_socket.connect((host, porta))
@@ -23,10 +24,10 @@ def menu():
     print("2. Subtrair")
     print("3. Multiplicar")
     print("4. Dividir")
-    print("5. Sair")
+    print("5. Sair\n")
 
 # Função principal do cliente
-def iniciar_cliente():
+def iniciar_cliente(host):
     while True:
         menu()
         opcao = input("Escolha uma operação: ")
@@ -50,9 +51,16 @@ def iniciar_cliente():
             print("Opção inválida!")
             continue
 
-        resultado = enviar_solicitacao(operacao, numeros)
-        print(f"Resultado: {resultado}")
+        resultado = enviar_solicitacao(host, operacao, numeros)
+        print(f"\nResultado: {resultado}\n")
 
 # Inicializa o cliente
 if __name__ == "__main__":
-    iniciar_cliente()
+    # Verifica se o IP do host foi passado como argumento
+    if len(sys.argv) < 2:
+        print("Uso: python cliente.py <IP_DO_HOST>")
+        sys.exit(1)
+
+    # Obtém o IP do host a partir dos argumentos da linha de comando
+    host = sys.argv[1]
+    iniciar_cliente(host)
